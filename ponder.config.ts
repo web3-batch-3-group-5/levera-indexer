@@ -1,37 +1,34 @@
 import { createConfig } from "ponder";
 import { http } from "viem";
 
-import { weth9Abi } from "./abis/weth9Abi";
+import { LendingPoolFactoryABI } from "./abis/LendingPoolFactoryABI";
+import { PositionFactoryABI } from "./abis/PositionFactoryABI";
 
 export default createConfig({
   ordering: "multichain",
   networks: {
-    mainnet: {
-      chainId: 1,
-      transport: http(process.env.PONDER_RPC_URL_1),
-    },
-    base: {
-      chainId: 8453,
-      transport: http(process.env.PONDER_RPC_URL_8453),
-    },
-    optimism: {
-      chainId: 10,
-      transport: http(process.env.PONDER_RPC_URL_10),
-    },
-    polygon: {
-      chainId: 137,
-      transport: http(process.env.PONDER_RPC_URL_137),
+    local: {
+      chainId: 109695,
+      transport: http(process.env.PONDER_RPC_URL_109695),
     },
   },
+  database: {
+    kind: "postgres",
+    connectionString: `postgresql://${process.env.PG_USER}:${process.env.PG_PWD}@${process.env.PG_HOST}:5432/${process.env.PG_DB}`,
+  },
   contracts: {
-    weth9: {
-      abi: weth9Abi,
+    LendingPoolFactory: {
+      abi: LendingPoolFactoryABI,
       startBlock: "latest",
       network: {
-        mainnet: { address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2" },
-        base: { address: "0x4200000000000000000000000000000000000006" },
-        optimism: { address: "0x4200000000000000000000000000000000000006" },
-        polygon: { address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619" },
+        local: { address: "0x1482d87527CCc6B83c7499F7956cA3712e83712E" },
+      },
+    },
+    PositionFactory: {
+      abi: PositionFactoryABI,
+      startBlock: "latest",
+      network: {
+        local: { address: "0xf692258599fb1DC41bbE076f1b4F34B4423c9aDC" },
       },
     },
   },
