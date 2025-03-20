@@ -11,13 +11,14 @@ const updateLendingPoolEventSchema = (name: string) => onchainTable(name, (t) =>
 }));
 
 const createSupplyEventSchema = (name: string) => onchainTable(name, (t) => ({
-  id: t.hex().primaryKey(),
   lendingPoolAddr: t.hex().notNull(),
   caller: t.hex().notNull(),
   supplyShares: t.bigint(),
   blockNumber: t.bigint().notNull(),
   blockTimestamp: t.bigint().notNull(),
 	transactionHash: t.hex().notNull(),
+}), (table) => ({
+  pk: primaryKey({ columns: [table.lendingPoolAddr, table.caller, table.blockTimestamp] }),
 }));
 
 const createPositionEventSchema = (name: string) => onchainTable(name, (t) => ({
@@ -59,6 +60,8 @@ export const lendingPoolStat = onchainTable("lendingPoolStat", (t) => ({
   totalBorrowAssets: t.bigint(),
   totalBorrowShares: t.bigint(),
   totalCollateral: t.bigint(),
+  ltp: t.bigint(),
+  interestRate: t.bigint(),
   blockNumber: t.bigint().notNull(),
   blockTimestamp: t.bigint().notNull(),
 	transactionHash: t.hex().notNull(),
@@ -77,13 +80,14 @@ export const userSupplyShare = onchainTable("userSupplyShare", (t) => ({
 }));
 
 export const accrueInterest = onchainTable("accrueInterest", (t) => ({
-  id: t.hex().primaryKey(),
   lendingPoolAddr: t.hex().notNull(),
   prevInterest: t.bigint(),
   interest: t.bigint(),
   blockNumber: t.bigint().notNull(),
   blockTimestamp: t.bigint().notNull(),
 	transactionHash: t.hex().notNull(),
+}), (table) => ({
+  pk: primaryKey({ columns: [table.lendingPoolAddr, table.interest, table.blockTimestamp] }),
 }));
 
 /** Lending Pool Events */
@@ -111,7 +115,7 @@ export const position = onchainTable("position", (t) => ({
   liquidationPrice: t.bigint(),
   health: t.bigint(),
   ltv: t.bigint(),
-  isActive: t.boolean().notNull(),
+  status: t.integer().notNull(),
 }), (table) => ({
   lendingPoolIdx: index().on(table.lendingPoolAddr),
   callerIdx: index().on(table.caller),

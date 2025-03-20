@@ -1,8 +1,19 @@
-import { createConfig } from "ponder";
+import { parseAbiItem } from "abitype";
+import { createConfig, factory } from "ponder";
 import { http } from "viem";
 
 import { LendingPoolFactoryABI } from "./abis/LendingPoolFactoryABI";
+import { LendingPoolABI } from "./abis/LendingPoolABI";
 import { PositionFactoryABI } from "./abis/PositionFactoryABI";
+import { PositionABI } from "./abis/PositionABI";
+
+const lendingPoolFactoryEvent = parseAbiItem(
+  "event CreateLendingPool(address lendingPoolAddr)",
+);
+
+const positionFactoryEvent = parseAbiItem(
+  "event CreatePosition(address lendingPoolAddr, address caller, address positionAddr)",
+);
 
 export default createConfig({
   ordering: "multichain",
@@ -24,12 +35,32 @@ export default createConfig({
         local: { address: "0x1482d87527CCc6B83c7499F7956cA3712e83712E" },
       },
     },
+    LendingPool: {
+      abi: LendingPoolABI,
+      network: "local",
+      address: factory({
+        address: "0x1482d87527CCc6B83c7499F7956cA3712e83712E",
+        event: lendingPoolFactoryEvent,
+        parameter: "lendingPoolAddr",
+      }),
+      startBlock: "latest",
+    },
     PositionFactory: {
       abi: PositionFactoryABI,
       startBlock: "latest",
       network: {
         local: { address: "0xf692258599fb1DC41bbE076f1b4F34B4423c9aDC" },
       },
+    },
+    Position: {
+      abi: PositionABI,
+      network: "local",
+      address: factory({
+        address: "0xf692258599fb1DC41bbE076f1b4F34B4423c9aDC",
+        event: positionFactoryEvent,
+        parameter: "positionAddr",
+      }),
+      startBlock: "latest",
     },
   },
 });

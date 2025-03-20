@@ -2,12 +2,6 @@ import { ponder } from "ponder:registry";
 import { createPosition, discardPosition } from "ponder:schema";
 
 ponder.on("PositionFactory:CreatePosition", async ({ event, context }) => {
-  const createdPosition = await context.db.find(createPosition, {
-		positionAddr: event.args.positionAddr,
-	});
-
-	if (createdPosition) return;
-
   await context.db
     .insert(createPosition)
     .values({
@@ -17,16 +11,11 @@ ponder.on("PositionFactory:CreatePosition", async ({ event, context }) => {
       blockNumber:  BigInt(event.block.timestamp),
       blockTimestamp:  BigInt(event.block.number),
       transactionHash:  event.transaction.hash,
-    });
+    })
+    .onConflictDoNothing();
 });
 
 ponder.on("PositionFactory:DeletePosition", async ({ event, context }) => {
-  const discardedPosition = await context.db.find(discardPosition, {
-		positionAddr: event.args.positionAddr,
-	});
-
-	if (discardedPosition) return;
-
   await context.db
     .insert(discardPosition)
     .values({
@@ -36,5 +25,6 @@ ponder.on("PositionFactory:DeletePosition", async ({ event, context }) => {
       blockNumber:  BigInt(event.block.timestamp),
       blockTimestamp:  BigInt(event.block.number),
       transactionHash:  event.transaction.hash,
-    });
+    })
+    .onConflictDoNothing();
 });

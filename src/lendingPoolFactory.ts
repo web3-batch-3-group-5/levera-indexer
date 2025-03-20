@@ -51,7 +51,8 @@ ponder.on("LendingPoolFactory:StoreLendingPool", async ({ event, context }) => {
       blockNumber:  BigInt(event.block.timestamp),
       blockTimestamp:  BigInt(event.block.number),
       transactionHash:  event.transaction.hash,
-    });
+    })
+    .onConflictDoNothing();
 });
 
 ponder.on("LendingPoolFactory:DiscardLendingPool", async ({ event, context }) => {
@@ -62,5 +63,6 @@ ponder.on("LendingPoolFactory:DiscardLendingPool", async ({ event, context }) =>
       blockNumber:  BigInt(event.block.timestamp),
       blockTimestamp:  BigInt(event.block.number),
       transactionHash:  event.transaction.hash,
-    });
+    })
+    .onConflictDoNothing();
 });
