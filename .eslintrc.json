@@ -1,3 +1,7 @@
 {
-  "extends": "ponder"
+  "extends": "ponder",
+  "root": true,
+  "rules": {
+    "prettier/prettier": 0,
+  },
 }
