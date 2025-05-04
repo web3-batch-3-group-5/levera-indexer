@@ -31,5 +31,5 @@ yarn-error.log*
 logfile
 
 # Directory generated to store volume
-/db-data/
+/pg-data/
 /pgadmin-data/

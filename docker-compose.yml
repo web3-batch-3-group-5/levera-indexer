@@ -1,31 +1,33 @@
 version: '3'
 
 services:
-  database:
-    image: 'postgres:latest'
+  postgres:
+    image: 'postgres:17-alpine'
+    hostname: postgres-server
     ports:
-      - 15432:5432
+      - '15432:5432'
     env_file:
       - .env
     networks:
-      - postgres-network
+      - db-network
     volumes:
-      - ${PWD}/db-data/:/var/lib/postgresql/data/
-      - ${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ${PWD}/pg-data/:/var/lib/postgresql/data/
 
   pgadmin:
     image: dpage/pgadmin4
+    hostname: pgadmin-web
     ports:
       - 15433:80
     env_file:
       - .env
     depends_on:
-      - database
+      - postgres
     networks:
-      - postgres-network
+      - db-network
     volumes:
       - ${PWD}/pgadmin-data/:/var/lib/pgadmin/
+    user: '$UID:$GID'
 
 networks:
-  postgres-network:
+  db-network:
     driver: bridge
