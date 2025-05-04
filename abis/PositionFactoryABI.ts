@@ -130,6 +130,30 @@ export const PositionFactoryABI = [
     "inputs": [
       {
         "internalType": "address",
+        "name": "_lendingPool",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "onBehalf",
+        "type": "address"
+      }
+    ],
+    "name": "liquidatePosition",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       },

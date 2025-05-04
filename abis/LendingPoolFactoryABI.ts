@@ -5,6 +5,11 @@ export const LendingPoolFactoryABI = [
         "internalType": "address",
         "name": "_router",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_vault",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -50,6 +55,12 @@ export const LendingPoolFactoryABI = [
         "internalType": "address",
         "name": "collateralToken",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "positionType",
+        "type": "uint8"
       },
       {
         "indexed": false,
@@ -318,6 +329,19 @@ export const LendingPoolFactoryABI = [
     "name": "updateLendingPoolStatus",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vault",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ] as const;
